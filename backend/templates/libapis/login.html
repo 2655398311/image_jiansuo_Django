@@ -1,0 +1,135 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>注册</title>#}
+{#</head>#}
+{#<body>#}
+{#    <form action="/student/login/" method="post" style="text-align: center; padding-top: 200px;">#}
+{#        {% csrf_token %}#}
+{#        <p>#}
+{#            <label for="ua">用户名</label><input type="text" name = "uname" id="ua"/>#}
+{#        </p>#}
+{#        <p>#}
+{#            <label for="pd">密&emsp;码</label><input type="password" name = "pwd" id="pd"/>#}
+{#        </p>#}
+{#        <p>#}
+{#            &emsp;&emsp;&emsp;&emsp;<input type="submit" value="登录"/>#}
+{#        </p>#}
+{#    </form>#}
+{#</body>#}
+{#</html>#}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/static/style.css">
+{#    <link href="{% static 'static/style.css' %}" rel="stylesheet">#}
+
+    <title>图像搜索登录</title>
+
+
+</head>
+<script src="/static/jquery.min.js"></script>
+
+<script>
+    //切换验证码
+    function changeCode(imgObj) {
+        imgObj.src = '/student/loadCode?time='+new Date().getTime();
+    }
+    function isEmail(str){
+        var reg = /^[a-zA-Z0-9_-]{6,}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+        return reg.test(str);
+    }
+
+    function login() {
+
+        var code = $('#code').val();
+            var cflag = checkCode(code);
+
+            if(!cflag){
+                $('#cSpan').text('×');
+                return false;
+            }
+    }
+
+    function checkCode(txt) {
+        var cflag = false;
+        $.ajax({
+            url: '/student/checkCode/',
+            type: 'get',
+            data: {'code': txt},
+            async: false,
+            success: function (result) {
+                var flag = result.checkFlag;
+                if (flag) {
+                    cflag = true;
+                    $('#cSpan').text('√');
+                } else {
+                    $('#cSpan').text('×');
+                }
+            }
+        });
+
+        return cflag;
+    }
+
+
+</script>
+
+<body>
+    <section>
+        <!-- 背景颜色 -->
+        <div class="color"></div>
+        <div class="color"></div>
+        <div class="color"></div>
+        <div class="box">
+            <!-- 背景圆 -->
+            <div class="circle" style="--x:0"></div>
+            <div class="circle" style="--x:1"></div>
+            <div class="circle" style="--x:2"></div>
+            <div class="circle" style="--x:3"></div>
+            <div class="circle" style="--x:4"></div>
+            <h2 style="text-align: center;color: #00a6ff">宸帆图像检索系统</h2>
+
+            <!-- 登录框 -->
+            <div class="container">
+                <div class="form">
+                    <h2>登录</h2>
+                    <form action="/student/login/" method="post" onsubmit=" return login();">
+                        {% csrf_token %}
+                        <div class="inputBox">
+                            <input type="text" placeholder="姓名" name = "uname" id="ua">
+
+                        </div>
+                        <div class="inputBox">
+                            <input type="password" placeholder="密码" name = "pwd" id="pd">
+
+                        </div>
+
+                        <div class="inputBox">
+                            验证码:<input type="text" id="code" size="4" onblur="checkCode(this.value)"/><img src="/student/loadCode/" onclick="changeCode(this)"><span style="color:red;" id="cSpan"></span>
+
+                            <input type="submit" value="登录">
+
+                        </div>
+
+                        <p class="forget" style="color: #cc1111">忘记密码?<a style="color: #cc1111" href="/student/forget">
+                                点击这里
+                            </a></p>
+
+                        <p class="forget" style="color: skyblue">没有账户?<a href="/register" style="color: skyblue;">
+                                注册
+                            </a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

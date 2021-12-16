@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>忘记密码</title>
+</head>
+
+<link rel="stylesheet" href="/static/Login.css">
+
+{#<body style="background-image: url('{{ url_img }}')">#}
+{#    <center style="padding-top: 300px;" >#}
+{#        <form>#}
+{##}
+{##}
+{##}
+{#        </form>#}
+{#        <form action="/student/forget/" method="post">#}
+{#            {% csrf_token %}#}
+{#            <div class="inputBox">#}
+{#                <input type="text" placeholder="账号" name = "uname" id="ua">#}
+{##}
+{#            </div>#}
+{#            <div class="inputBox">#}
+{##}
+{#                <input type="password" placeholder="新密码" name = "pwd" id="pd">#}
+{##}
+{#            </div>#}
+{#            <div class="inputBox">#}
+{#                <input type="password" placeholder="确认密码" name = "repwd" id="pd">#}
+{##}
+{#            </div>#}
+{##}
+{#            <input type="submit" value="修改">#}
+{#            <p style="color: #cc1111">{{ notexis }}</p><a href="/student/login/">{{ login }}<a/>#}
+{##}
+{#            <p class="forget" style="color: skyblue">没有账户?<a href="/register" style="color: skyblue;">#}
+{#                                        注册#}
+{#                                    </a></p>#}
+{#            <p style="color: #f5dd5d;">{{ img_desc }}</p>#}
+{##}
+{##}
+{#        </form>#}
+{##}
+{#    </center>#}
+<h2 style="text-align: center;padding-top: 100px">找回密码</h2>
+<body style="background-image: url('{{ url_img }}')">
+
+    <div class="box" style="filter:alpha(opacity=50);background:#ffffff;text-align: center">
+          <form action="/student/forget/" method="post">
+              {% csrf_token %}
+
+                <div class="inputBox">
+                    <input name="uname" placeholder="用户名" id="uname" type="text"/><span id="unameSpan"></span>
+{#                    <h2>用户名</h2>#}
+                    <label style="color: #222222;font-weight: bolder">用户名</label>
+                </div>
+                <div class="inputBox">
+                <input type="password" placeholder="密码" name = "pwd" id="pd">
+                    <label style="color: #222222;font-weight: bolder">密码</label>
+                </div>
+                <div class="inputBox">
+                    <input type="password" placeholder="确认密码" name = "repwd" id="repd">
+                    <label style="color: #222222;font-weight: bolder">确认密码</label>
+                </div>
+
+
+                <input type="submit" name="" value="修改">
+                <p style="color: #cc1111">{{ notexis }}</p><a href="/student/login/">{{ login }}<a/>
+
+
+
+
+              <a href="{{ copyrightlink }}"><p style="color: #00a6ff;text-align:center;padding-top: 50px;padding-left: 50px;">{{ img_desc }}</p></a>
+
+
+          </form>
+	</div>
+
+</body>
+</html>

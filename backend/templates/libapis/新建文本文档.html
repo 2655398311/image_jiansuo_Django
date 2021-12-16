@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+    #body-all{
+        background: url('/static/lQLPDhrw3A0tH3_NAUXNAUWwVlBWIrUE5AQBt938gMAdAA_325_325.png');
+        padding-left: 250px;
+        padding-top: 50px
+    }
+
+    #page{
+
+        background: white;
+        height: 700px;
+        width: 1250px;
+    }
+    #left_blue{
+        background: white;
+        height: 700px;
+        width: 312px;
+        float: left;
+
+    }
+    #right_red{
+        background: white;
+        height: 600px;
+        width: 937px;
+        float: right;
+        {#background: url('{{ url_img }}');#}
+
+
+    }
+    #img-left{
+        height: auto;
+        width: auto;
+        max-width: 40%;
+        max-height: 40%;
+        {#float: right;#}
+        margin: 12px;
+    }
+    #ch-desc{
+        color: #f5dd5d;
+        padding-left: 300px;
+        {#float: right;#}
+    }
+    #img-right{
+        height:580px;
+        width: 937px;
+
+
+    }
+    .imgBox{
+        border-top: 5px solid cadetblue;
+        margin: 0 auto;
+
+    }
+    .img-slide{
+        height:580px;
+        width: 937px;
+    }
+    #uname{
+        padding-left: 10px;
+
+
+    }
+
+
+</style>
+<script>
+
+
+
+</script>
+</head>
+{#{% load static %}#}
+<body id="body-all">
+
+<div id="page">
+		<div id="left_blue">
+            {% for img in  reuslt%}
+                <img src="{{ img.img_url }}" id="img-left" onclick="onclickShow('{{ img.img_url }}')">
+
+            {% endfor %}
+
+		</div>
+		<div id="right_red" class="imgBox">
+{#            {% for foo in result_index %}#}
+{#                <img src="{{ foo.index_img }}" id="img-right" class="img-slide">#}
+                <img src="https://cn.bing.com/th?id=OHR.GlowWormBMNP_ZH-CN9173680006_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp" id="img-right" class="img-slide img" alt="img1">
+                <img src="http://s.cn.bing.net/th?id=OHR.ElephantGiving_ZH-CN9743352473_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp" id="img-right" class="img-slide img" alt="img2">
+                <img src="https://cn.bing.com/th?id=OHR.GlowWormBMNP_ZH-CN9173680006_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp" id="img-right" class="img-slide img" alt="img1">
+                <img src="http://s.cn.bing.net/th?id=OHR.ElephantGiving_ZH-CN9743352473_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp" id="img-right" class="img-slide img" alt="img2">
+                <img src="https://cn.bing.com/th?id=OHR.GlowWormBMNP_ZH-CN9173680006_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp" id="img-right" class="img-slide img" alt="img1">
+                <img src="http://s.cn.bing.net/th?id=OHR.ElephantGiving_ZH-CN9743352473_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp" id="img-right" class="img-slide img" alt="img2">
+                <img src="https://cn.bing.com/th?id=OHR.GlowWormBMNP_ZH-CN9173680006_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp" id="img-right" class="img-slide img" alt="img1">
+                <img src="http://s.cn.bing.net/th?id=OHR.ElephantGiving_ZH-CN9743352473_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp" id="img-right" class="img-slide img" alt="img2">
+                <img class="img-slide img" src="https://cn.bing.com/th?id=OHR.GlowWormBMNP_ZH-CN9173680006_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp" alt="img1">
+                <p id="ch-desc">{{ foo.img_desc_ }}</p>
+
+{#            {% endfor %}#}
+
+		</div>
+
+
+
+</div>
+<form action="/register/" method="post">
+    {% csrf_token %}
+    <div>
+        <label style="color: #222222;font-weight: bolder">用户名</label>
+
+        <input name="uname" placeholder="用户名" id="uname" type="text" onblur="checkUname()"/><span id="unameSpan" style="padding-right: 100px;"></span>
+    </div>
+    <div class="inputBox" id="pwd-pwd">
+        <label style="color: #222222;font-weight: bolder">密码</label>
+
+        <input type="password" placeholder="密码" name = "pwd" id="pd">
+    </div>
+    <input type="submit" name="" value="注册">
+
+    <p class="forget" style="color: #cc1111">已有账户<a style="color: #f5dd5d" href="/student/login">登录</a></p>
+
+</form>
+
+
+</body>
+
+<script type="text/javascript">
+
+    var index = 0, len;
+        // 类似获取一个元素数组
+    var imgBox = document.getElementsByClassName("img-slide img");
+    var length = imgBox.length;
+    len = length;
+    imgBox[index].style.display = 'block';
+    // 逻辑控制函数
+    function slideShow() {
+        index ++;
+        // 防止数组溢出
+        if(index >= len) index = 0;
+        // 遍历每一个元素
+        for(var i=0; i<len; i++) {
+            imgBox[i].style.display = 'none';
+        }
+        // 每次只有一张图片显示
+        imgBox[index].style.display = 'block';
+    }
+
+        // 逻辑控制函数
+    function onclickShow(url) {
+
+        var img = document.createElement('img');
+        img.src = url;
+        img.className= 'img-slide img';
+        var right_red = document.getElementById("right_red");
+        right_red.appendChild(img);
+        // right_red.innerHTML="<img src=\"https://cn.bing.com/th?id=OHR.GlowWormBMNP_ZH-CN9173680006_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp\" id=\"img-right\" class=\"img-slide img\" alt=\"img1\">";
+
+        // 遍历每一个元素
+        for(var i=0; i<8; i++) {
+
+            imgBox[i].style.display = 'none';
+        }
+        len ++;
+        // 每次只有一张图片显示
+        // imgBox[index].style.display = 'block';
+        //clearInterval(interval);
+    }
+
+    // 定时器，间隔3s切换图片
+    var interval = setInterval(slideShow, 3000);
+
+    function img(this_) {
+
+        var img_path = this_.getAttribute('src')
+        window.open(img_path)
+
+    }
+
+
+
+</script>
+
+</html>

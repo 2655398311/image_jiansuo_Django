@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户个人信息</title>
+</head>
+<style rel="stylesheet">
+
+    .yuan{
+        width: 200px;
+        height: 200px;
+        background: white;
+        border-radius: 50%;
+        border:3px solid #00a6ff;
+
+
+
+    }
+    .aa{
+        width: 140px;
+        height: 135px;
+        padding-top: 30px;
+        padding-left: 30px;
+    }
+    .p-user{
+        color: #cc1111;
+    }
+
+
+</style>
+<body>
+
+    <p>用户个人信息</p>
+
+
+
+    <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="img">选择图片:</label>
+            <input type="hidden" name="action" value="upload_image" />
+            <input type="file" name="input_image" id='input_image' accept="image/*">
+            <input type="submit" value="上传图片">
+
+
+    </form>
+    <div class="yuan">
+        <img class="aa" src="/media/media/images/upload/{{ image_uname }}">
+
+    </div>
+    欢迎您<p class="p-user">{{ user_login }}</p>
+
+    <p style="color:red;">{{ success }}</p>
+    <a href="/register/"><p style="color:red;">{{ login }}</p></a>
+
+
+{#    <img onclick="dd(this)" src="/media/media/images/upload/{{ image_uname }}" width="250" height="250">#}
+
+</body>
+</html>

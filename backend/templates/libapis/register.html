@@ -1,0 +1,288 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>注册</title>#}
+{#    <script type="text/javascript"></script>#}
+{##}
+{#</head>#}
+{#<body>#}
+{#    <form action="/register/" method="post" style="text-align: center;padding-top: 200px;">#}
+{#        {% csrf_token %}#}
+{##}
+{#        用户名：<input type="text" name="uname" id="uname" onblur="checkUname()"/><span id="unameSpan"></span>#}
+{#        <p>#}
+{#            <label for="ua">用户名</label><input type="text" name = "uname" id="uname"/>#}
+{#        </p>#}
+{#        <p>#}
+{#            <label for="pd">密&emsp;码</label><input type="password" name = "pwd" id="pd"/>#}
+{#        </p>#}
+{#        <p>#}
+{#            &emsp;&emsp;&emsp;&emsp;<input type="submit" value="注册"/>#}
+{#        </p>#}
+{#    </form>#}
+{#</body>#}
+{##}
+{#</html>#}
+
+
+{#{% load static %}#}
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{##}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{##}
+{#    <link rel="stylesheet" href="/static/style.css">#}
+{#    <link rel="stylesheet" href="/static/style.css">#}
+{##}
+{#    <link href="{% static 'static/style.css' %}" rel="stylesheet">#}
+{##}
+{#    <title>图像搜索注册</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{##}
+{#    <section>#}
+{#        <!-- 背景颜色 -->#}
+{#        <div class="color"></div>#}
+{#        <div class="color"></div>#}
+{#        <div class="color"></div>#}
+{##}
+{#        <div class="box">#}
+{##}
+{#            <!-- 背景圆 -->#}
+{#            <div class="circle" style="--x:0"></div>#}
+{#            <div class="circle" style="--x:1"></div>#}
+{#            <div class="circle" style="--x:2"></div>#}
+{#            <div class="circle" style="--x:3"></div>#}
+{#            <div class="circle" style="--x:4"></div>#}
+{#            <!-- 登录框 -->#}
+{#            <h2 style="text-align: center;color: #00a6ff">宸帆图像检索系统</h2>#}
+{##}
+{#            <div class="container">#}
+{#                <div class="form">#}
+{#                    <h2>注册</h2>#}
+{#                    <form action="/register/" method="post">#}
+{#                        {% csrf_token %}#}
+{#                        <div class="inputBox">#}
+{#                            <input type="text" placeholder="姓名" name = "uname" id="uname">#}
+{##}
+{#                        </div>#}
+{#                        <div class="inputBox">#}
+{#                            <input type="password" placeholder="密码" name = "pwd" id="pd">#}
+{##}
+{#                        </div>#}
+{#                        <div class="inputBox">#}
+{#                            <input type="submit" value="注册">#}
+{##}
+{#                        </div>#}
+{#                        <p class="forget">忘记密码?<a href="#">#}
+{#                                点击这里#}
+{#                            </a></p>#}
+{#                        <p class="forget">已有账户<a href="/student/login">#}
+{#                                登录#}
+{#                            </a></p>#}
+{#                    </form>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </section>#}
+{#</body>#}
+{##}
+{#</html>#}
+
+{% load static %}
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>图像检索注册</title>
+<link rel="stylesheet" href="/static/Login.css">
+
+
+
+<style>
+        .redSpan{
+            color: red;
+        }
+        .greenSpan{
+            color: yellow;
+
+        }
+        .codeSpan{
+            color: #f5dd5d;
+        }
+
+        .portrait {
+            height: 50px;
+             width: 50px;
+            position: absolute;
+            right: 0px;
+            top: -10px;
+        }
+
+
+</style>
+<script src="/static/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+    //切换验证码
+    function changeCode(imgObj) {
+        imgObj.src = '/student/loadCode?time='+new Date().getTime();
+    }
+    function isEmail(str){
+        var reg = /^[a-zA-Z0-9_-]{6,}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+        return reg.test(str);
+    }
+
+    function login() {
+
+        var code = $('#code').val();
+            var cflag = checkCode(code);
+
+            if(!cflag){
+                $('#cSpan').text('×');
+                return false;
+            }
+    }
+
+    function checkCode(txt) {
+        var cflag = false;
+        $.ajax({
+            url: '/student/checkCode/',
+            type: 'get',
+            data: {'code': txt},
+            async: false,
+            success: function (result) {
+                var flag = result.checkFlag;
+                if (flag) {
+                    cflag = true;
+                    $('#cSpan').text('√');
+                } else {
+                    $('#cSpan').text('×');
+                }
+            }
+        });
+
+        return cflag;
+    }
+
+
+    function checkUname() {
+
+        var uname = document.getElementById('uname').value;
+        var reg = /^\w{3,9}$/gi;
+        {#var unamespan = document.getElementById('unameSpan').value;#}
+        if (uname.length == 0) {
+            document.getElementById('unameSpan').innerText = '*'
+            document.getElementById('unameSpan').className = 'redSpan'
+
+
+        } else if (reg.test(uname)) {
+            document.getElementById('unameSpan').innerText = '√'
+            document.getElementById('unameSpan').className = 'greenSpan'
+
+
+        } else {
+
+            document.getElementById('unameSpan').innerText = '×'
+            document.getElementById('unameSpan').className = 'redSpan'
+
+        }
+    }
+
+
+    window.onload = function () {
+
+
+        {#loadCode()#}
+        document.getElementById('cSpan').innerText = num
+        document.getElementById('cSpan').className = 'codeSpan'
+
+    }
+
+    var num = parseInt(Math.random() * 9000 + 1000);
+
+
+
+
+
+</script>
+
+</head>
+<body style="background-image: url('{{ url_img }}')">
+
+    <div class="box" style="filter:alpha(opacity=50);background:#ffffff">
+            <h2 style="text-align: center;color: black">图像检索系统注册</h2>
+
+          <form action="/register/" method="post" onsubmit=" return login();">
+{#            <div style="text-align: center;"><a href="/student/touxiang/" style="text-align: center">点击上传用户头像</a></div>#}
+
+          {% csrf_token %}
+
+             <div class="inputBox">
+                 <input type="file" placeholder="用户头像" id="portrait-input">
+                 <input name = "portrait"  id="portrait" type="hidden" value="129">
+                    <img src="/static/default.jpg"  class="portrait">
+                    <label style="color: #222222;font-weight: bolder">用户头像</label>
+             </div>
+
+            <div class="inputBox">
+                <input name="uname" placeholder="用户名" id="uname" type="text" onblur="checkUname()"/><span id="unameSpan" style="padding-right: 100px;"></span>
+        {#        <h2>用户名</h2>#}
+                <label style="color: #222222;font-weight: bolder">用户名</label>
+            </div>
+            <div class="inputBox">
+                <input type="password" placeholder="密码" name = "pwd" id="pd">
+                    <label style="color: #222222;font-weight: bolder">密码</label>
+            </div>
+            <div class="inputBox">
+                <input type="password" placeholder="确认密码" name = "repwd" id="repd">
+                <label style="color: #222222;font-weight: bolder">确认密码</label>
+            </div>
+              <p style="color: #cc1111">{{ tishi }}</p>
+
+
+            <div class="inputBox">
+        {#        <input type="code" placeholder="验证码" name = "code" id="cspan"><span id="codeSpan"></span>#}
+        {#		<label style="color: #f5dd5d">验证码</label>#}
+{#                验证码:<input type="text" id="code" name="code" size="4" onblur="loadCode()"/><span id="cSpan"></span>#}
+                验证码:<input type="text" id="code" size="4" onblur="checkCode(this.value)"/><img src="/student/loadCode/" onclick="changeCode(this)"><span style="color:red;" id="cSpan"></span>
+            </div>
+
+            <input type="submit" name="" value="注册">
+
+              <p class="forget" style="color: #cc1111">已有账户<a style="color: #00a6ff" href="/student/login">登录</a></p>
+
+
+              <a href="{{ copyrightlink }}"><p style="color: #00a6ff;padding-top: 50px;padding-left: 30px;background: transparent">{{ img_desc }}</p></a>
+              </form>
+	</div>
+    </body>
+
+<script>
+    $(function () {
+        $("#portrait-input").on('change', function () {
+                var formData = new FormData();
+                formData.append('portrait', document.getElementById('portrait-input').files[0]);
+                $.ajax({
+                    url: "/student/touxiang/",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: "JSON",
+                    success:function (callback) {
+                        console.log(callback);
+                        $("#portrait").val(callback.image_id);
+                        $(".portrait").attr('src', '/media/' + callback.raw_name);
+                    }
+                });
+            })
+    })
+</script>
+
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品相似款识别</title>
+    <style>
+        .c{float:left;padding:10px;}
+        .btns {width: 100px;height: 30px;color:#000000;background: #6DDCBD;text-align: center}
+    </style>
+</head>
+{#style="background-image: url('/static/11-8-2021.jpg')"#}
+
+<style rel="stylesheet">
+
+
+</style>
+<script src="/static/jquery.min.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        $("#portrait-input").on('change', function () {
+                var formData = new FormData();
+                formData.append('portrait', document.getElementById('portrait-input').files[0]);
+                $.ajax({
+                    url: "/student/touxiang/",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: "JSON",
+                    success:function (callback) {
+                        console.log(callback);
+                        $("#portrait").val(callback.image_id);
+                        $(".portrait").attr('src', '/media/' + callback.raw_name);
+                    }
+                });
+            })
+    })
+
+</script>
+<body>
+    <div>
+        <span>相似图片推荐</span>
+
+    </div>
+    <div class="c" style="width: 400px;height: 4800px;">
+    <div style="float: left">
+        <p>欢迎您：<span style="color:red;">{{ user_login }}</span></p>
+
+        <a href="/student/logout/"> 退出登录 </a>
+    </div>
+{#     <input type="file" placeholder="用户头像" id="portrait-input">#}
+{#     <input name = "portrait"  id="portrait" type="hidden" value="129">#}
+{#        <label style="color: #222222;font-weight: bolder">用户头像</label>#}
+
+        <img onclick="dd(this)" src="/media/{{ portrait_path }}" style="height: 50px;border-radius: 50%;">
+
+
+
+        {% if result == "upload_success" or result == "recognize_image" %}
+        <h3>你上传的图片</h3>
+        <img onclick="dd(this)" src="/media/media/images/upload/{{ image_uname }}" width="250" height="250">
+        {% endif %}
+
+
+
+
+        <!-- 上传图片按钮 -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="img">选择图片:</label>
+            <input type="hidden" name="action" value="upload_image" />
+            <input type="file" name="input_image" id='input_image' accept="image/*">
+            <input type="submit" value="上传图片">
+
+
+        </form>
+
+    </div>
+    <!-- 显示当前上传的图片 -->
+
+
+
+
+    <!-- 如果上传成功, 显示推荐按钮 -->
+    {% if result == "upload_success" %}
+    <form method="post" enctype="application/json">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="recognize_image" />
+        <input type="hidden" name="input_image_uname" value="{{ image_uname }}" />
+        <div style="text-align: center">
+                <input type="submit"  class="btns" value="推荐相似">
+        </div>
+    </form>
+
+
+    <!-- 展示推荐图片 -->
+
+    {% elif result == "recognize_image" %}
+    <h1 style="text-align: center">相似图片</h1>
+        {% for image_path in image_paths %}
+
+            <div class="c" style="display: inline;width: 300px; height: 400px;text-align: center;">
+                <img onclick="cc(this)" style="padding-top: 15px;background-color: rgba(255,255,255,0)" src="/media/pic_down_white/{{ image_path.item_name }}.jpg" width="100" height="100">
+                <span style="display: block;text-align: center;overflow-wrap:break-word;padding-top: 20px;" onclick="aa(this)">{{ image_path.item_name }}</span>
+                <span style="display: block;text-align: center;overflow-wrap:break-word;padding-top: 30px;color: #222222" onclick="bb(this)">{{ image_path.item_title }}</span>
+                <span style="display: block;text-align: center;overflow-wrap:break-word;padding-top: 20px;color: #cc1111">{{ image_path.price }}</span>
+                <span style="display: block;text-align: center;overflow-wrap:break-word;padding-top: 30px;color: #222222">{{ image_path.item_class_name }}</span>
+                <span style="display: block;text-align: center;overflow-wrap:break-word;padding-top: 40px;color: #222222">{{ image_path.taobao_shop_name }}</span>
+
+            </div>
+
+        {% endfor %}
+
+{#     <a href="{{image_path}}"><img src="{{ image_path }}" width="200" height="200"></a>#}
+
+{#        <div style="display: inline">#}
+{#            <img src="media/images/xiangsi/{{ image_path.item_name }}.jpg" width="100" height="100">#}
+{##}
+{#            <span style="display: block;text-align: center" onclick="aa(this)">{{ image_path }}</span>#}
+{#            <span style="display: block;text-align: center">{{ image_path.item_title }}</span>#}
+{##}
+{#        </div>#}
+{##}
+{#        {% endfor %}#}
+
+
+
+        {% else %}
+
+
+        {% endif %}
+
+</body>
+
+<script type="text/javascript">
+    var i = 1;
+
+    function aa(this_) {
+
+	var imgPath = this_.innerHTML;
+    {#imgPath = imgPath.replace(".jpg","")#}
+
+	if(imgPath.indexOf("_3") != -1){//不包含_3直接进行跳转
+	    imgPath = imgPath.replace("_3","")
+	    imgPath = "https://item.taobao.com/item.htm?spm=a230r.7195193.1997079397.8.71e86f2d6cRRvP&id="+imgPath+"&abbucket=20"
+
+
+		window.open(imgPath)
+
+	}else{
+
+        // imgPath = imgPath.replace("_3","");
+        imgPath = "https://item.taobao.com/item.htm?spm=a230r.7195193.1997079397.8.71e86f2d6cRRvP&id="+imgPath+"&abbucket=20"
+
+
+		window.open(imgPath)
+	}
+
+    }
+    function bb(this_) {
+
+	var imgPath = this_.parentNode;
+	imgPath = imgPath.children[1].innerHTML;
+	{#alert(imgPath)#}
+    {#imgPath = imgPath.replace(".jpg","")#}
+
+	if(imgPath.indexOf("_3") != -1){//不包含_3直接进行跳转
+	    imgPath = imgPath.replace("_3","")
+	    imgPath = "https://item.taobao.com/item.htm?spm=a230r.7195193.1997079397.8.71e86f2d6cRRvP&id="+imgPath+"&abbucket=20"
+
+		window.open(imgPath)
+
+	}else{
+
+        // imgPath = imgPath.replace("_3","");
+        imgPath = "https://item.taobao.com/item.htm?spm=a230r.7195193.1997079397.8.71e86f2d6cRRvP&id="+imgPath+"&abbucket=20"
+
+		window.open(imgPath)
+	}
+
+    }
+    function cc(this_) {
+
+        var img_path = this_.getAttribute('src')
+        {#alert(img_path)#}
+        window.open(img_path)
+
+    }
+    function dd(this_) {
+
+        var img_path = this_.getAttribute('src')
+        {#alert(img_path)#}
+        {#alert(img_path)#}
+        window.open(img_path)
+
+    }
+
+
+
+
+</script>
+</html>
